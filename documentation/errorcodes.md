@@ -48,13 +48,13 @@ This is the universal error tracking system that the whole system uses.
 | 56  |    406    | Group password was invalid |
 | 57  |    400    | User is not in the group |
 | *58*|   *400*   | *Password is required for password protected group* |
-| 59  |    400    | [Group limit reached](/documentation/limits) |
+| 59  |    400    | [Group limit reached](/documentation/limits?id=maximum-groups) |
 | 60  |    400    | [Invalid group type](/documentation/groups) |
 | 61  |    404    | Invitation link not found |
 | 70  |    500    | General task error, if you see this please create a ticket |
 | 71  |    404    | Task not found |
 | 72  |    400    | Task due date is invalid |
-| 73  |    400    | [Task limit reached](/documentation/limits) |
+| 73  |    400    | [Task limit reached](/documentation/limits?id=maximum-tasks) |
 | 90  |    500    | General comment error, if you see this please create a ticket |
 | 91  |   *404*   | *Comment section not found* |
 | 92  |    404    | Comment not found |
@@ -62,7 +62,7 @@ This is the universal error tracking system that the whole system uses.
 | *94*|   *401*   | *User is not owner of that comment* |
 | 110 |    500    | General subject error, if you see this please create a ticket |
 | 111 |    404    | Subject not found |
-| 112 |    400    | [Subject limit reached](/documentation/limits) |
+| 112 |    400    | [Subject limit reached](/documentation/limits?id=maximum-subjects) |
 | 120 |    500    | General profile picture error, if you see this please create a ticket |
 | 121 |    400    | Invalid size for profile picture |
 | 122 |    400    | Invalid format for profile picture |
@@ -75,5 +75,5 @@ This is the universal error tracking system that the whole system uses.
 | 136 |    400    | The session must be active to do that |
 | 137 |    503    | Thera service currently unavailable |
 | 138 |    503    | External service currently unavailable |
-| 139 |    400    | [Thera session limit reached](/documentation/limits) |
+| 139 |    400    | [Thera session limit reached](/documentation/limits?id=maximum-thera-sessions) |
 | 170 |    503    | Hazizz service currently unavailable |
