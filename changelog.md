@@ -1,3 +1,7 @@
+2020.04.27:
+- Data schemas revised, and endpoints have been sorted into categories. 
+- Deprecations have been flagged.
+
 2020.04.26:
 - Springfox replaced with Springdoc-openapi. [Avaiable now](https://hazizz.duckdns.org:9000/swagger-ui.html) *Each module now does **not** have their own separate swagger-ui.*
 - Json Schema generation for developer documentation in work (goal: code generation for clients)
