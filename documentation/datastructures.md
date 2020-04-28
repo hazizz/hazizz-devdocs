@@ -3,4 +3,4 @@ The platform uses many different kinds of resources, and to make it accessible t
 
 This schema might contain non-standard or incompliant data, because it was derived from a Swagger specification.
 
-[This file is available here.](../assets/hazizz-platform.schema.json)
+[This file is available here.](../assets/hazizz-platform.schema.json ':ignore')

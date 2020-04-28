@@ -7,4 +7,4 @@ The platform provides a swagger-ui endpoint, that you are free to use. It is acc
 ## Swagger JSON
 We also provide a single JSON file that aggregates all the functionalities.
 
-[This file is available here.](../assets/hazizz-platform.api.json)
+[This file is available here.](../assets/hazizz-platform.api.json ':ignore')
