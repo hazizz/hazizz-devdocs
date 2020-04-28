@@ -1,3 +1,7 @@
+2020.04.28:
+- Openapi 3 and JSON Schema files are now available for developers.
+- Added corresponding documentation pages. (Swagger documentation, and data structures)
+
 2020.04.27:
 - Data schemas revised, and endpoints have been sorted into categories. 
 - Deprecations have been flagged.

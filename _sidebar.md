@@ -11,6 +11,8 @@
 
         * [Error codes](/documentation/errorcodes.md "Error codes - Házizz Dev Docs")
         * [Limitations](/documentation/limits.md "Limitations - Házizz Dev Docs")
+        * [Swagger documentation](/documentation/swagger.md "Data structures - Házizz Dev Docs")
+        * [Data structures](/documentation/datastructures.md "Data structures - Házizz Dev Docs")
 
     * Guidelines
 
