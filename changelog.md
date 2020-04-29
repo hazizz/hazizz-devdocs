@@ -1,3 +1,7 @@
+2020.04.29:
+- Gateway shortening reworked
+- Invite link visibility for open groups fixed
+
 2020.04.28:
 - Openapi 3 and JSON Schema files are now available for developers.
 - Added corresponding documentation pages. (Swagger documentation, and data structures)

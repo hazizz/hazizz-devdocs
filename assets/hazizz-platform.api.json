@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Hazizz platform",
-    "version": "1"
+    "version": "2"
   },
   "servers": [
     {
@@ -11,6 +11,110 @@
     }
   ],
   "paths": {
+    "/s/groups/{id}/{password}": {
+      "get": {
+        "tags": [
+          "Shortener"
+        ],
+        "operationId": "shortenGroupInvite",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "308": {
+            "description": "Redirects to a dynamic link"
+          }
+        }
+      }
+    },
+    "/s/groups/{id}": {
+      "get": {
+        "tags": [
+          "Shortener"
+        ],
+        "operationId": "shortenGroupInvite_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "308": {
+            "description": "Redirects to a dynamic link"
+          }
+        }
+      }
+    },
+    "/auth-server/account/password": {
+      "patch": {
+        "tags": [
+          "Account management"
+        ],
+        "description": "Warning! You have to reauthenticate after this.",
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/auth-server/account/remove": {
+      "post": {
+        "tags": [
+          "Account management"
+        ],
+        "description": "Warning! This is irreversible",
+        "operationId": "removeAccount",
+        "responses": {
+          "200": {
+            "description": "default response"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/auth-server/account/googleaccount": {
       "post": {
         "tags": [
@@ -189,54 +293,6 @@
             }
           }
         }
-      }
-    },
-    "/auth-server/account/remove": {
-      "post": {
-        "tags": [
-          "Account management"
-        ],
-        "description": "Warning! This is irreversible",
-        "operationId": "removeAccount",
-        "responses": {
-          "200": {
-            "description": "default response"
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/auth-server/account/password": {
-      "patch": {
-        "tags": [
-          "Account management"
-        ],
-        "description": "Warning! You have to reauthenticate after this.",
-        "operationId": "changePassword",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PasswordUpdateRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response"
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
       }
     },
     "/auth-server/admin/permissions/{permission}/{username}": {
@@ -543,6 +599,100 @@
         ]
       }
     },
+    "/auth-server/users": {
+      "get": {
+        "tags": [
+          "Administrative"
+        ],
+        "operationId": "returnAllUser",
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "uniqueItems": true,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserInformation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": [
+              "admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/auth-server/users/{userId}": {
+      "get": {
+        "tags": [
+          "Account management"
+        ],
+        "operationId": "returnPublicUserData",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInformation"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Account management"
+        ],
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/auth-server/users/{userId}/details": {
       "get": {
         "tags": [
@@ -715,100 +865,6 @@
         ]
       }
     },
-    "/auth-server/users/{userId}": {
-      "get": {
-        "tags": [
-          "Account management"
-        ],
-        "operationId": "returnPublicUserData",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserInformation"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Account management"
-        ],
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response"
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/auth-server/users": {
-      "get": {
-        "tags": [
-          "Administrative"
-        ],
-        "operationId": "returnAllUser",
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "uniqueItems": true,
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserInformation"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": [
-              "admin"
-            ]
-          }
-        ]
-      }
-    },
     "/auth-server/information/permissions": {
       "get": {
         "tags": [
@@ -838,31 +894,6 @@
         ]
       }
     },
-    "/auth-server/information/detailed": {
-      "get": {
-        "tags": [
-          "Account management"
-        ],
-        "operationId": "returnDetailedUserInformation",
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetailedUserInformation"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/auth-server/information": {
       "get": {
         "tags": [
@@ -876,6 +907,31 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/UserInformation"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/auth-server/information/detailed": {
+      "get": {
+        "tags": [
+          "Account management"
+        ],
+        "operationId": "returnDetailedUserInformation",
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetailedUserInformation"
                 }
               }
             }
@@ -915,6 +971,119 @@
             "token": [
               "admin"
             ]
+          }
+        ]
+      }
+    },
+    "/hazizz-server/comments/tasks/{taskId}/chat": {
+      "get": {
+        "tags": [
+          "Comments - Task chat"
+        ],
+        "operationId": "returnChatFromTask",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "depth",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 2
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicCommentData"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Comments - Task chat"
+        ],
+        "operationId": "createChatCommentInTask",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateCommentData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
           }
         ]
       }
@@ -1095,7 +1264,7 @@
         "tags": [
           "Task's comments"
         ],
-        "operationId": "createResponseComment_1",
+        "operationId": "createResponseComment",
         "parameters": [
           {
             "name": "taskId",
@@ -1193,6 +1362,52 @@
           }
         },
         "deprecated": true,
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/comments/{commentId}/children": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "createResponseComment_1",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateCommentData"
+                }
+              }
+            }
+          }
+        },
         "security": [
           {
             "token": []
@@ -1308,165 +1523,6 @@
           }
         },
         "deprecated": true,
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/comments/tasks/{taskId}/chat": {
-      "get": {
-        "tags": [
-          "Comments - Task chat"
-        ],
-        "operationId": "returnChatFromTask",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "depth",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicCommentData"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Comments - Task chat"
-        ],
-        "operationId": "createChatCommentInTask",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CommentCreationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PrivateCommentData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/comments/{commentId}/children": {
-      "post": {
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "createResponseComment",
-        "parameters": [
-          {
-            "name": "commentId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CommentCreationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PrivateCommentData"
-                }
-              }
-            }
-          }
-        },
         "security": [
           {
             "token": []
@@ -1634,6 +1690,110 @@
         ]
       }
     },
+    "/hazizz-server/tasks/{taskId}/completed": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "operationId": "returnIsTaskCompleted",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "operationId": "setTaskCompleted",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Tasks"
+        ],
+        "operationId": "setTaskNotCompleted",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/hazizz-server/tasks/{taskId}": {
       "get": {
         "tags": [
@@ -1741,110 +1901,6 @@
         ]
       }
     },
-    "/hazizz-server/tasks/{taskId}/completed": {
-      "get": {
-        "tags": [
-          "Tasks"
-        ],
-        "operationId": "returnIsTaskCompleted",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Tasks"
-        ],
-        "operationId": "setTaskCompleted",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Tasks"
-        ],
-        "operationId": "setTaskNotCompleted",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/hazizz-server/tasks/{taskId}/tags": {
       "get": {
         "tags": [
@@ -1878,6 +1934,488 @@
             }
           }
         },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/details": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "returnGroupDetails",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateGroupData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/users/{userId}": {
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "deleteUserFromGroup",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicUserData"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/permissions": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "returnPermissions",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/PublicUserData"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/withoutme": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "description": "Returns information about a group with and without user in it",
+        "operationId": "returnGroupWithoutMeById",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicGroupDataWithoutMe"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/permissions/{userId}": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "returnUserPermission",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "enum": [
+                    "OWNER",
+                    "MODERATOR",
+                    "USER",
+                    "NULL"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "updateUserPermission_1",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupLevelRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "enum": [
+                    "OWNER",
+                    "MODERATOR",
+                    "USER",
+                    "NULL"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/invitelinks/{inviteLinkId}": {
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "removeInvitationLink",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "inviteLinkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/permission/{userId}": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "updateUserPermission",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupLevelRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "enum": [
+                    "OWNER",
+                    "MODERATOR",
+                    "USER",
+                    "NULL"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/invitelinks": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "returnInvitationLinks",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicInviteLinkData"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "createInvitationLink",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicInviteLinkData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/groups/{groupId}/invitelink": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "operationId": "returnInvitationLink",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
         "security": [
           {
             "token": []
@@ -2092,35 +2630,6 @@
         ]
       }
     },
-    "/hazizz-server/groups/{groupId}/leave": {
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "leaveGroup",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response"
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/hazizz-server/groups/{groupId}/join": {
       "post": {
         "tags": [
@@ -2209,255 +2718,15 @@
         ]
       }
     },
-    "/hazizz-server/groups/{groupId}/withoutme": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "description": "Returns information about a group with and without user in it",
-        "operationId": "returnGroupWithoutMeById",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicGroupDataWithoutMe"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/users/{userId}": {
-      "delete": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "deleteUserFromGroup",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicUserData"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/invitelink": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "returnInvitationLink",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/permissions/{userId}": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "returnUserPermission",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "enum": [
-                    "OWNER",
-                    "MODERATOR",
-                    "USER",
-                    "NULL"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
+    "/hazizz-server/groups/{groupId}/leave": {
       "post": {
         "tags": [
           "Groups"
         ],
-        "operationId": "updateUserPermission_1",
+        "operationId": "leaveGroup",
         "parameters": [
           {
             "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GroupLevelRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "enum": [
-                    "OWNER",
-                    "MODERATOR",
-                    "USER",
-                    "NULL"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/invitelinks/{inviteLinkId}": {
-      "delete": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "removeInvitationLink",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "inviteLinkId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2469,219 +2738,6 @@
         "responses": {
           "200": {
             "description": "default response"
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/permissions": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "returnPermissions",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/PublicUserData"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/invitelinks": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "returnInvitationLinks",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicInviteLinkData"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "createInvitationLink",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicInviteLinkData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/details": {
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "returnGroupDetails",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PrivateGroupData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/groups/{groupId}/permission/{userId}": {
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "operationId": "updateUserPermission",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GroupLevelRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "enum": [
-                    "OWNER",
-                    "MODERATOR",
-                    "USER",
-                    "NULL"
-                  ]
-                }
-              }
-            }
           }
         },
         "security": [
@@ -2771,42 +2827,6 @@
         ]
       }
     },
-    "/hazizz-server/users/{userId}/picture/full": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "returnFullPicture",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ImageBase64"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/hazizz-server/groups/{groupId}/users/picture": {
       "get": {
         "tags": [
@@ -2846,6 +2866,42 @@
         ]
       }
     },
+    "/hazizz-server/users/{userId}/picture/full": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "returnFullPicture",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageBase64"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/hazizz-server/information/motd": {
       "get": {
         "tags": [
@@ -2864,6 +2920,52 @@
             }
           }
         }
+      }
+    },
+    "/hazizz-server/tasks/{taskId}/report": {
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "operationId": "reportTask",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
       }
     },
     "/hazizz-server/comments/{commentId}/report": {
@@ -3162,52 +3264,6 @@
         ]
       }
     },
-    "/hazizz-server/tasks/{taskId}/report": {
-      "post": {
-        "tags": [
-          "Tasks"
-        ],
-        "operationId": "reportTask",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/hazizz-server/tasks/subjects/{subjectId}": {
       "get": {
         "tags": [
@@ -3291,67 +3347,6 @@
         ]
       }
     },
-    "/hazizz-server/tasks/me": {
-      "get": {
-        "tags": [
-          "Tasks - My"
-        ],
-        "operationId": "returnTasksFromUser",
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicTaskData"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Tasks - My"
-        ],
-        "operationId": "createTaskForUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TaskCreationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicTaskData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/hazizz-server/tasks/groups/{groupId}": {
       "get": {
         "tags": [
@@ -3406,6 +3401,67 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicTaskData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/tasks/me": {
+      "get": {
+        "tags": [
+          "Tasks - My"
+        ],
+        "operationId": "returnTasksFromUser",
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicTaskData"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Tasks - My"
+        ],
+        "operationId": "createTaskForUser",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3530,76 +3586,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PrivateSubjectData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/subjects/{subjectId}/subscribed": {
-      "post": {
-        "tags": [
-          "Subjects"
-        ],
-        "operationId": "setSubjectSubscribed",
-        "parameters": [
-          {
-            "name": "subjectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Subjects"
-        ],
-        "operationId": "setSubjectNotSubscribed",
-        "parameters": [
-          {
-            "name": "subjectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
                 }
               }
             }
@@ -3974,15 +3960,15 @@
         ]
       }
     },
-    "/hazizz-server/users/{userId}/groups": {
-      "get": {
+    "/hazizz-server/subjects/{subjectId}/subscribed": {
+      "post": {
         "tags": [
-          "Dashboard"
+          "Subjects"
         ],
-        "operationId": "returnGroups",
+        "operationId": "setSubjectSubscribed",
         "parameters": [
           {
-            "name": "userId",
+            "name": "subjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -3997,116 +3983,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "uniqueItems": true,
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicGroupData"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/users/{userId}/notifications": {
-      "get": {
-        "tags": [
-          "Dashboard"
-        ],
-        "operationId": "returnEvents",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicEventLog"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/users": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "returnAllUsers",
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PublicUserData"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": [
-              "admin"
-            ]
-          }
-        ]
-      }
-    },
-    "/hazizz-server/users/{userId}": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "returnPublicUserData",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicUserData"
+                  "type": "boolean"
                 }
               }
             }
@@ -4120,41 +3997,12 @@
       },
       "delete": {
         "tags": [
-          "Account"
+          "Subjects"
         ],
-        "operationId": "deleteUser",
+        "operationId": "setSubjectNotSubscribed",
         "parameters": [
           {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response"
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/users/{userId}/displayname": {
-      "get": {
-        "tags": [
-          "Account"
-        ],
-        "operationId": "returnDisplayName",
-        "parameters": [
-          {
-            "name": "userId",
+            "name": "subjectId",
             "in": "path",
             "required": true,
             "schema": {
@@ -4169,87 +4017,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Account"
-        ],
-        "operationId": "updateDisplayName",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DisplayNameRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicUserData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/hazizz-server/users/{userId}/details": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "returnPrivateUserData",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PrivateUserData"
+                  "type": "boolean"
                 }
               }
             }
@@ -4342,6 +4110,319 @@
         ]
       }
     },
+    "/hazizz-server/users/{userId}/displayname": {
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "operationId": "returnDisplayName",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "operationId": "updateDisplayName",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DisplayNameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicUserData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "returnPublicUserData",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicUserData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Account"
+        ],
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/users/{userId}/details": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "returnPrivateUserData",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivateUserData"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/users/{userId}/notifications": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "operationId": "returnEvents",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicEventLog"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/users/{userId}/groups": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "operationId": "returnGroups",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "uniqueItems": true,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicGroupData"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/hazizz-server/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "returnAllUsers",
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicUserData"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": [
+              "admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/thera-server/kreta/authrequired": {
+      "get": {
+        "tags": [
+          "Kreta Session API"
+        ],
+        "operationId": "returnAuthenticationRequired",
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/thera-server/kreta/schools": {
       "get": {
         "tags": [
@@ -4358,6 +4439,52 @@
                   "additionalProperties": {
                     "type": "string"
                   }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/thera-server/kreta/sessions/{sessionId}/auth": {
+      "post": {
+        "tags": [
+          "Kreta Session API"
+        ],
+        "operationId": "authenticateSession",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KretaSessionCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicKretaSessionData"
                 }
               }
             }
@@ -4420,77 +4547,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PublicKretaSessionData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/thera-server/kreta/sessions/{sessionId}/auth": {
-      "post": {
-        "tags": [
-          "Kreta Session API"
-        ],
-        "operationId": "authenticateSession",
-        "parameters": [
-          {
-            "name": "sessionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/KretaSessionCreationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicKretaSessionData"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/thera-server/kreta/authrequired": {
-      "get": {
-        "tags": [
-          "Kreta Session API"
-        ],
-        "operationId": "returnAuthenticationRequired",
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "boolean"
                 }
               }
             }
@@ -4566,45 +4622,6 @@
         ]
       }
     },
-    "/thera-server/kreta/sessions/{sessionId}/notes": {
-      "get": {
-        "tags": [
-          "Kreta API"
-        ],
-        "operationId": "returnNotes",
-        "parameters": [
-          {
-            "name": "sessionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KretaNote"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
     "/thera-server/kreta/sessions/{sessionId}/schedule": {
       "get": {
         "tags": [
@@ -4662,12 +4679,12 @@
         ]
       }
     },
-    "/thera-server/kreta/sessions/{sessionId}/averages": {
+    "/thera-server/kreta/sessions/{sessionId}/tasks": {
       "get": {
         "tags": [
           "Kreta API"
         ],
-        "operationId": "returnAverages",
+        "operationId": "returnTasks",
         "parameters": [
           {
             "name": "sessionId",
@@ -4687,88 +4704,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/KretaAverage"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/thera-server/kreta/sessions/{sessionId}/grades": {
-      "get": {
-        "tags": [
-          "Kreta API"
-        ],
-        "operationId": "returnGrades",
-        "parameters": [
-          {
-            "name": "sessionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/KretaGrade"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/thera-server/kreta/sessions/{sessionId}/homework": {
-      "get": {
-        "tags": [
-          "Kreta API"
-        ],
-        "operationId": "returnHomework",
-        "parameters": [
-          {
-            "name": "sessionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KretaHomework"
+                    "$ref": "#/components/schemas/KretaTask"
                   }
                 }
               }
@@ -4878,12 +4814,12 @@
         ]
       }
     },
-    "/thera-server/kreta/sessions/{sessionId}/tasks": {
+    "/thera-server/kreta/sessions/{sessionId}/averages": {
       "get": {
         "tags": [
           "Kreta API"
         ],
-        "operationId": "returnTasks",
+        "operationId": "returnAverages",
         "parameters": [
           {
             "name": "sessionId",
@@ -4903,7 +4839,127 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/KretaTask"
+                    "$ref": "#/components/schemas/KretaAverage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/thera-server/kreta/sessions/{sessionId}/notes": {
+      "get": {
+        "tags": [
+          "Kreta API"
+        ],
+        "operationId": "returnNotes",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KretaNote"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/thera-server/kreta/sessions/{sessionId}/homework": {
+      "get": {
+        "tags": [
+          "Kreta API"
+        ],
+        "operationId": "returnHomework",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KretaHomework"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/thera-server/kreta/sessions/{sessionId}/grades": {
+      "get": {
+        "tags": [
+          "Kreta API"
+        ],
+        "operationId": "returnGrades",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/KretaGrade"
+                    }
                   }
                 }
               }
@@ -4977,6 +5033,45 @@
         ]
       }
     },
+    "/thera-server/users/{userId}/tasks": {
+      "get": {
+        "tags": [
+          "Thera resources"
+        ],
+        "operationId": "returnTasks_1",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "default response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TheraTask"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/thera-server/users/{userId}/grades": {
       "get": {
         "tags": [
@@ -5006,45 +5101,6 @@
                     "items": {
                       "$ref": "#/components/schemas/TheraGrade"
                     }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
-      }
-    },
-    "/thera-server/users/{userId}/tasks": {
-      "get": {
-        "tags": [
-          "Thera resources"
-        ],
-        "operationId": "returnTasks_1",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default response",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TheraTask"
                   }
                 }
               }
@@ -5092,6 +5148,44 @@
   },
   "components": {
     "schemas": {
+      "PasswordUpdateRequest": {
+        "required": [
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "password": {
+            "maxLength": 65,
+            "minLength": 8,
+            "type": "string",
+            "description": "Value will be trimmed"
+          }
+        }
+      },
+      "AuthenticationRequest": {
+        "required": [
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "pattern": "^[@.a-zA-Z0-9_-]*$",
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "authToken": {
+            "type": "string"
+          },
+          "openIdToken": {
+            "type": "string"
+          }
+        }
+      },
       "DetailedUserInformation": {
         "required": [
           "disabled",
@@ -5180,30 +5274,6 @@
           }
         }
       },
-      "AuthenticationRequest": {
-        "required": [
-          "username"
-        ],
-        "type": "object",
-        "properties": {
-          "username": {
-            "pattern": "^[@.a-zA-Z0-9_-]*$",
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "refreshToken": {
-            "type": "string"
-          },
-          "authToken": {
-            "type": "string"
-          },
-          "openIdToken": {
-            "type": "string"
-          }
-        }
-      },
       "GoogleUserCreationRequest": {
         "required": [
           "consent",
@@ -5216,20 +5286,6 @@
           },
           "consent": {
             "type": "boolean"
-          }
-        }
-      },
-      "PasswordUpdateRequest": {
-        "required": [
-          "password"
-        ],
-        "type": "object",
-        "properties": {
-          "password": {
-            "maxLength": 65,
-            "minLength": 8,
-            "type": "string",
-            "description": "Value will be trimmed"
           }
         }
       },
@@ -5257,10 +5313,10 @@
             "type": "integer",
             "format": "int64"
           },
-          "access_token": {
+          "refresh_token": {
             "type": "string"
           },
-          "refresh_token": {
+          "access_token": {
             "type": "string"
           }
         }
@@ -5342,62 +5398,6 @@
             }
           },
           "data": {
-            "type": "string"
-          }
-        }
-      },
-      "PublicCommentData": {
-        "required": [
-          "children",
-          "content",
-          "creationDate",
-          "creator",
-          "hiddenChildren",
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "content": {
-            "type": "string"
-          },
-          "creator": {
-            "$ref": "#/components/schemas/PublicUserData"
-          },
-          "children": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PublicCommentData"
-            }
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "hiddenChildren": {
-            "type": "boolean"
-          }
-        }
-      },
-      "PublicUserData": {
-        "required": [
-          "displayName",
-          "id",
-          "username"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "username": {
-            "type": "string"
-          },
-          "displayName": {
             "type": "string"
           }
         }
@@ -5529,6 +5529,35 @@
           }
         }
       },
+      "PublicCommentData": {
+        "required": [
+          "content",
+          "creationDate",
+          "creator",
+          "hiddenChildren",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "content": {
+            "type": "string"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/PublicUserData"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "hiddenChildren": {
+            "type": "boolean"
+          }
+        }
+      },
       "PublicGroupData": {
         "required": [
           "groupType",
@@ -5582,6 +5611,26 @@
           },
           "subscribed": {
             "type": "boolean"
+          }
+        }
+      },
+      "PublicUserData": {
+        "required": [
+          "displayName",
+          "id",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
           }
         }
       },
@@ -5731,27 +5780,6 @@
           }
         }
       },
-      "GroupCreationRequest": {
-        "required": [
-          "groupName",
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "groupName": {
-            "maxLength": 20,
-            "minLength": 3,
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "OPEN",
-              "CLOSED"
-            ]
-          }
-        }
-      },
       "PublicGroupDataWithoutMe": {
         "required": [
           "groupType",
@@ -5786,6 +5814,23 @@
           }
         }
       },
+      "GroupLevelRequest": {
+        "required": [
+          "permission"
+        ],
+        "type": "object",
+        "properties": {
+          "permission": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "MODERATOR",
+              "USER",
+              "NULL"
+            ]
+          }
+        }
+      },
       "PublicInviteLinkData": {
         "required": [
           "id",
@@ -5802,19 +5847,23 @@
           }
         }
       },
-      "GroupLevelRequest": {
+      "GroupCreationRequest": {
         "required": [
-          "permission"
+          "groupName",
+          "type"
         ],
         "type": "object",
         "properties": {
-          "permission": {
+          "groupName": {
+            "maxLength": 20,
+            "minLength": 3,
+            "type": "string"
+          },
+          "type": {
             "type": "string",
             "enum": [
-              "OWNER",
-              "MODERATOR",
-              "USER",
-              "NULL"
+              "OPEN",
+              "CLOSED"
             ]
           }
         }
@@ -5902,19 +5951,6 @@
           }
         }
       },
-      "SubjectUpdateRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "maxLength": 20,
-            "minLength": 2,
-            "type": "string"
-          },
-          "subscriberOnly": {
-            "type": "boolean"
-          }
-        }
-      },
       "SubjectCreationRequest": {
         "required": [
           "name",
@@ -5928,6 +5964,60 @@
             "type": "string"
           },
           "subscriberOnly": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SubjectUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 20,
+            "minLength": 2,
+            "type": "string"
+          },
+          "subscriberOnly": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AlertSettings": {
+        "required": [
+          "alarmTime",
+          "fridayEnabled",
+          "mondayEnabled",
+          "saturdayEnabled",
+          "sundayEnabled",
+          "thursdayEnabled",
+          "tuesdayEnabled",
+          "wednesdayEnabled"
+        ],
+        "type": "object",
+        "properties": {
+          "alarmTime": {
+            "type": "string",
+            "format": "time",
+            "example": "07:00:00+01:00"
+          },
+          "mondayEnabled": {
+            "type": "boolean"
+          },
+          "tuesdayEnabled": {
+            "type": "boolean"
+          },
+          "wednesdayEnabled": {
+            "type": "boolean"
+          },
+          "thursdayEnabled": {
+            "type": "boolean"
+          },
+          "fridayEnabled": {
+            "type": "boolean"
+          },
+          "saturdayEnabled": {
+            "type": "boolean"
+          },
+          "sundayEnabled": {
             "type": "boolean"
           }
         }
@@ -5979,47 +6069,6 @@
           }
         }
       },
-      "AlertSettings": {
-        "required": [
-          "alarmTime",
-          "fridayEnabled",
-          "mondayEnabled",
-          "saturdayEnabled",
-          "sundayEnabled",
-          "thursdayEnabled",
-          "tuesdayEnabled",
-          "wednesdayEnabled"
-        ],
-        "type": "object",
-        "properties": {
-          "alarmTime": {
-            "type": "string",
-            "format": "time",
-            "example": "07:00:00+01:00"
-          },
-          "mondayEnabled": {
-            "type": "boolean"
-          },
-          "tuesdayEnabled": {
-            "type": "boolean"
-          },
-          "wednesdayEnabled": {
-            "type": "boolean"
-          },
-          "thursdayEnabled": {
-            "type": "boolean"
-          },
-          "fridayEnabled": {
-            "type": "boolean"
-          },
-          "saturdayEnabled": {
-            "type": "boolean"
-          },
-          "sundayEnabled": {
-            "type": "boolean"
-          }
-        }
-      },
       "KretaSessionCreationRequest": {
         "required": [
           "url",
@@ -6057,34 +6106,6 @@
           },
           "url": {
             "type": "string"
-          }
-        }
-      },
-      "KretaNote": {
-        "required": [
-          "content",
-          "creationDate",
-          "teacher",
-          "title",
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "teacher": {
-            "type": "string"
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },
@@ -6149,78 +6170,14 @@
           }
         }
       },
-      "KretaAverage": {
+      "KretaTask": {
         "required": [
-          "classGrade",
-          "difference",
-          "grade",
-          "subject"
-        ],
-        "type": "object",
-        "properties": {
-          "subject": {
-            "type": "string"
-          },
-          "grade": {
-            "type": "number",
-            "format": "double"
-          },
-          "classGrade": {
-            "type": "number",
-            "format": "double"
-          },
-          "difference": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "KretaGrade": {
-        "required": [
-          "creationDate",
-          "date",
-          "grade",
-          "gradeType",
-          "subject",
-          "topic",
-          "weight"
-        ],
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "topic": {
-            "type": "string"
-          },
-          "gradeType": {
-            "type": "string"
-          },
-          "grade": {
-            "type": "string"
-          },
-          "weight": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "KretaHomework": {
-        "required": [
-          "content",
-          "creationDate",
           "dueDate",
+          "gradeType",
           "id",
           "subject",
-          "teacher"
+          "teacher",
+          "topic"
         ],
         "type": "object",
         "properties": {
@@ -6231,17 +6188,16 @@
           "subject": {
             "type": "string"
           },
-          "content": {
+          "topic": {
+            "type": "string"
+          },
+          "gradeType": {
             "type": "string"
           },
           "teacher": {
             "type": "string"
           },
           "dueDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "creationDate": {
             "type": "string",
             "format": "date"
           }
@@ -6290,14 +6246,68 @@
           }
         }
       },
-      "KretaTask": {
+      "KretaAverage": {
         "required": [
+          "classGrade",
+          "difference",
+          "grade",
+          "subject"
+        ],
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "grade": {
+            "type": "number",
+            "format": "double"
+          },
+          "classGrade": {
+            "type": "number",
+            "format": "double"
+          },
+          "difference": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "KretaNote": {
+        "required": [
+          "content",
+          "creationDate",
+          "teacher",
+          "title",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "teacher": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "KretaHomework": {
+        "required": [
+          "content",
+          "creationDate",
           "dueDate",
-          "gradeType",
           "id",
           "subject",
-          "teacher",
-          "topic"
+          "teacher"
         ],
         "type": "object",
         "properties": {
@@ -6308,10 +6318,7 @@
           "subject": {
             "type": "string"
           },
-          "topic": {
-            "type": "string"
-          },
-          "gradeType": {
+          "content": {
             "type": "string"
           },
           "teacher": {
@@ -6320,6 +6327,48 @@
           "dueDate": {
             "type": "string",
             "format": "date"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "KretaGrade": {
+        "required": [
+          "creationDate",
+          "date",
+          "grade",
+          "gradeType",
+          "subject",
+          "topic",
+          "weight"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "gradeType": {
+            "type": "string"
+          },
+          "grade": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -6387,48 +6436,6 @@
           }
         }
       },
-      "TheraGrade": {
-        "required": [
-          "accountId",
-          "creationDate",
-          "date",
-          "grade",
-          "gradeType",
-          "subject",
-          "topic",
-          "weight"
-        ],
-        "type": "object",
-        "properties": {
-          "accountId": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "topic": {
-            "type": "string"
-          },
-          "gradeType": {
-            "type": "string"
-          },
-          "grade": {
-            "type": "string"
-          },
-          "weight": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "TheraTask": {
         "required": [
           "accountId",
@@ -6470,6 +6477,48 @@
           "date": {
             "type": "string",
             "writeOnly": true
+          }
+        }
+      },
+      "TheraGrade": {
+        "required": [
+          "accountId",
+          "creationDate",
+          "date",
+          "grade",
+          "gradeType",
+          "subject",
+          "topic",
+          "weight"
+        ],
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "gradeType": {
+            "type": "string"
+          },
+          "grade": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }
