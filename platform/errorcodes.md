@@ -76,4 +76,6 @@ This is the universal error tracking system that the whole system uses.
 | 137 |    503    | Thera service currently unavailable |
 | 138 |    503    | External service currently unavailable |
 | 139 |    400    | [Thera session limit reached](/documentation/limits?id=maximum-thera-sessions) |
+| 150 |    400    | Recurrence rule is invalid |
+| 151 |    404    | Custom schedule not found |
 | 170 |    503    | Hazizz service currently unavailable |
